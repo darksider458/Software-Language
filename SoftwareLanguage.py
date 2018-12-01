@@ -3,58 +3,62 @@ import sys, shlex, operator
 import re
 
 
-tk_http, tk_ftp, tk_telnet, tk_mailto, tk_at, tk_plus, tk_divider, tk_doubledot, tk_dot, tk_space, tk_string, tk_EOI = range(12)
+tk_http, tk_ftp, tk_telnet, tk_mailto, tk_at, tk_plus, tk_divider, tk_doubledot, tk_dot, tk_space, tk_string,tk_Xalpha,tk_EOI = range(13)
 
 synbols = { '@':tk_at, '+':tk_plus, '/':tk_divider, ':':tk_doubledot, '.':tk_dot, '%':tk_space }
 keywords = {'http://':tk_http , 'ftp://':tk_ftp , 'telnet://':tk_telnet, 'mailto::':tk_mailto }
+
+table = {}
+
 the_col = 0
 the_line = 1
+current_line = ""
 the_ch = "" # dummy char
 input_file = None
 
 regexes = {'http://','ftp://','telnet://','mailto::'}
 
 def error(line, col, msg):
-    print(line, col, msg)
-    exit(1)
-    
-def next_ch():
-    global the_ch, the_col, the_line
- 
-    the_ch = input_file.read(1)
-    the_col += 1
-    if the_ch == '\n':
-        the_line += 1
-        the_col = 0
-    return the_ch
+    #print(line, col, msg)
+    return tk_EOI,line,col
 
-def gettok():
+def gettok(char):
     err_line = the_line
     err_col  = the_col
 
-    if len(the_ch) == 0: return tk_EOI, err_line,err_col
-    elif the_ch in synbols:
-        sym = synbols[the_ch]
-        next_ch()
+    if len(char) == 0: return tk_EOI, err_line,err_col
+    elif char in synbols:
+        sym = synbols[char]
         return sym, err_line, err_col
+    return tk_Xalpha,err_line, err_col
     
 def getType():
-    global input_file
-    line = input_file.readline()
+    global input_file,current_line
+    current_line = input_file.readline()
     err_line = the_line
     err_col  = the_col
 
     
     for exp in regexes:
-        searchObject =  re.search(exp,line)
+        searchObject =  re.search(exp,current_line)
         if searchObject:
             return keywords[exp],err_line,err_col
     
-    error(err_line,err_col, "false identifyer of url correct are http:// ,ftp:// , telnet://, mailto::")
+    return error(err_line,err_col, "false identifyer of url correct are http:// ,ftp:// , telnet://, mailto::")
 
 def HTTP_Analyze():
+    global current_line 
+    current_line = current_line.split(' ')
+    line = current_line[0]
+    line = line[7:]
+   
+    for char in line:
+        token = gettok(char)
+        print(token)
+        pass
 
-    pass
+
+
 def FTP_Analyze():
 
     pass  
@@ -68,18 +72,22 @@ def MailTo_Analyze():
 # main ***
 
 input_file = open('mock.txt', 'r')
-typeOfUrl = getType()
 
-value = typeOfUrl[0]
+while True:
+    typeOfUrl = getType()
+    value = typeOfUrl[0]
 
-if value == 0:
-    HTTP_Analyze()
-elif value == 1:
-    FTP_Analyze()
-    pass
-elif value == 2:
-    TelNet_Analyze()
-    pass
-elif value == 3:
-    MailTo_Analyze()
-    pass
+
+    if value == tk_http:
+        HTTP_Analyze()
+    elif value == tk_ftp:
+        FTP_Analyze()
+        pass
+    elif value == tk_telnet:
+        TelNet_Analyze()
+        pass
+    elif value == tk_mailto:
+        MailTo_Analyze()
+        pass
+    elif value == tk_EOI:
+        break
