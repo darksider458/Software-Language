@@ -7,7 +7,7 @@ tk_http, tk_ftp, tk_telnet, tk_mailto,tk_divider, tk_question,tk_at, tk_doubledo
 
 nd_start,nd_ftp,nd_telnet,nd_mailto,nd_httpaddress,nd_hostport,nd_A,nd_path,nd_J,nd_search,nd_login,nd_path,nd_user,nd_password,nd_xalphas,nd_hostname,nd_C,\
 nd_port,nd_D,nd_segment, nd_E,nd_xalpha, nd_I, nd_F,nd_G,nd_digits,nd_alpha,nd_digit,nd_H = range(29)
-symbols = { '@':tk_at, '+':tk_plus, '/':tk_divider, ':':tk_doubledot, '.':tk_dot, '%':tk_space,'?':tk_question }
+symbols = { '@':tk_at, '+':tk_plus, '/':tk_divider, ':':tk_doubledot, '.':tk_dot, '%':tk_space,'?':tk_question, '$':tk_EOI }
 keywords = {'http://':tk_http , 'ftp://':tk_ftp , 'telnet://':tk_telnet, 'mailto::':tk_mailto }
 letter = list(string.ascii_letters)
 number = [str(i) for i in range(0,10)]
@@ -221,7 +221,160 @@ def fillDic():
         table[key] = value
 
 
-
+# ################### states which are not number or letter, didnt add $ rules
+# http
+key = (nd_start, tk_http)
+value = [tk_http, nd_httpaddress]
+table[key] = value
+# ftp
+key = (nd_start, tk_ftp)
+value = [tk_ftp, nd_ftp]
+table[key] = value
+# telnet
+key = (nd_start, tk_telnet)
+value = [tk_telnet, nd_telnet]
+table[key] = value
+# mailto
+key = (nd_start, tk_mailto)
+value = [tk_mailto, nd_mailto]
+table[key] = value
+# A
+# '/'
+key = (nd_A, tk_divider)
+value = [tk_divider, nd_path, nd_J]
+table[key] = value
+# '?'
+key = (nd_A, tk_question)
+value = [tk_question, nd_search]
+table[key] = value
+# '$'
+key = (nd_A, tk_dollar)
+value = [tk_epsilon]
+table[key] = value
+# J
+# '?'
+key = (nd_J, tk_question)
+value = [tk_question, nd_search]
+table[key] = value
+# '$'
+key = (nd_J, tk_dollar)
+value = [tk_epsilon]
+table[key] = value
+# C
+# '/'
+key = (nd_C, tk_divider)
+value = [tk_epsilon]
+table[key] = value
+# '?'
+key = (nd_C, tk_question)
+value = [tk_epsilon]
+table[key] = value
+# ':'
+key = (nd_C, tk_doubledot)
+value = [tk_doubledot, nd_port]
+table[key] = value
+# '$'
+key = (nd_C, tk_dollar)
+value = [tk_epsilon]
+table[key] = value
+# D
+# '/'
+key = (nd_D, tk_divider)
+value = [tk_epsilon]
+table[key] = value
+# '?'
+key = (nd_D, tk_question)
+value = [tk_epsilon]
+table[key] = value
+# ':'
+key = (nd_D, tk_doubledot)
+value = [tk_epsilon]
+table[key] = value
+# '.'
+key = (nd_D, tk_dot)
+value = [tk_dot, nd_hostname]
+table[key] = value
+# '$'
+key = (nd_D, tk_dollar)
+value = [tk_epsilon]
+table[key] = value
+# E
+# '/'
+key = (nd_E, tk_divider)
+value = [tk_divider, nd_path]
+table[key] = value
+# '?'
+key = (nd_E, tk_question)
+value = [tk_epsilon]
+table[key] = value
+# '$'
+key = (nd_E, tk_dollar)
+value = [tk_epsilon]
+table[key] = value
+# I
+# '/'
+key = (nd_I, tk_divider)
+value = [tk_epsilon]
+table[key] = value
+# '?'
+key = (nd_I, tk_question)
+value = [tk_epsilon]
+table[key] = value
+# '$'
+key = (nd_I, tk_dollar)
+value = [tk_epsilon]
+table[key] = value
+# F
+# '+'
+key = (nd_F, tk_plus)
+value = [tk_plus, nd_search]
+table[key] = value
+# '$'
+key = (nd_F, tk_dollar)
+value = [tk_epsilon]
+table[key] = value
+# G
+# '/'
+key = (nd_G, tk_divider)
+value = [tk_epsilon]
+table[key] = value
+# '?'
+key = (nd_G, tk_question)
+value = [tk_epsilon]
+table[key] = value
+# '@'
+key = (nd_G, tk_at)
+value = [tk_epsilon]
+table[key] = value
+# ':'
+key = (nd_G, tk_doubledot)
+value = [tk_epsilon]
+table[key] = value
+# '.'
+key = (nd_G, tk_dot)
+value = [tk_epsilon]
+table[key] = value
+# '+'
+key = (nd_G, tk_plus)
+value = [tk_epsilon]
+table[key] = value
+# '$'
+key = (nd_G, tk_dollar)
+value = [tk_epsilon]
+table[key] = value
+# H
+# '/'
+key = (nd_H, tk_divider)
+value = [tk_epsilon]
+table[key] = value
+# '?'
+key = (nd_H, tk_question)
+value = [tk_epsilon]
+table[key] = value
+# '$'
+key = (nd_H, tk_dollar)
+value = [tk_epsilon]
+table[key] = value
 
 fillDic()
 print(table)
