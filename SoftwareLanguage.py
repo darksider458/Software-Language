@@ -3,7 +3,7 @@ import sys, shlex, operator
 import re
 
 
-tk_http, tk_ftp, tk_telnet, tk_mailto, tk_at, tk_plus, tk_divider, tk_doubledot, tk_dot, tk_space, tk_string,tk_Xalpha,tk_EOI = range(13)
+tk_http, tk_ftp, tk_telnet, tk_mailto, tk_at, tk_plus, tk_divider, tk_doubledot, tk_dot, tk_space, tk_string,tk_letter,tk_number, tk_EOI = range(14)
 
 synbols = { '@':tk_at, '+':tk_plus, '/':tk_divider, ':':tk_doubledot, '.':tk_dot, '%':tk_space }
 keywords = {'http://':tk_http , 'ftp://':tk_ftp , 'telnet://':tk_telnet, 'mailto::':tk_mailto }
@@ -13,7 +13,6 @@ table = {}
 the_col = 0
 the_line = 1
 current_line = ""
-the_ch = "" # dummy char
 input_file = None
 
 regexes = {'http://','ftp://','telnet://','mailto::'}
@@ -30,7 +29,8 @@ def gettok(char):
     elif char in synbols:
         sym = synbols[char]
         return sym, err_line, err_col
-    return tk_Xalpha,err_line, err_col
+    elif char.isalpha() == True: return tk_letter,err_line, err_col
+    elif char.isalpha() == False: return tk_number,err_line, err_col
     
 def getType():
     global input_file,current_line
