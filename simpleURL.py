@@ -10,7 +10,7 @@ keywords = {'http://':tk_http , 'ftp://':tk_ftp , 'telnet://':tk_telnet, 'mailto
 letter = list(string.ascii_letters)
 number = [str(i) for i in range(0,10)]
 
-print(number)
+
 
 
 
@@ -32,4 +32,5 @@ def openFile():
             lexicalAnalysis(line)
 
 if __name__ == "__main__":    
-    openFile()    
+    # openFile()  
+    pass  
