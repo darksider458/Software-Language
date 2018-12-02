@@ -6,11 +6,14 @@ import string
 tk_http, tk_ftp, tk_telnet, tk_mailto,tk_divider, tk_question,tk_at, tk_doubledot, tk_dot, tk_plus, tk_space, tk_string, tk_letter, tk_number, tk_EOI, tk_epsilon,tk_dollar = range(17)
 
 nd_start,nd_ftp,nd_telnet,nd_mailto,nd_httpaddress,nd_hostport,nd_A,nd_path,nd_J,nd_search,nd_login,nd_path,nd_user,nd_password,nd_xalphas,nd_hostname,nd_C,\
-nd_port,nd_D,nd_segment, nd_E,nd_xalpha, nd_I, nd_F,nd_G,nd_digits,nd_alpha,nd_digit,nd_H = range(29)
-symbols = { '@':tk_at, '+':tk_plus, '/':tk_divider, ':':tk_doubledot, '.':tk_dot, '%':tk_space,'?':tk_question, '$':tk_EOI }
+nd_port,nd_D,nd_segment, nd_E,nd_xalpha, nd_I, nd_F,nd_G,nd_digits,nd_alpha,nd_digit,nd_H = range(20, 20 + 29)
+symbols = { '@':tk_at, '+':tk_plus, '/':tk_divider, ':':tk_doubledot, '.':tk_dot, '%':tk_space,'?':tk_question, '$':tk_dollar }
 keywords = {'http://':tk_http , 'ftp://':tk_ftp , 'telnet://':tk_telnet, 'mailto::':tk_mailto }
 letter = list(string.ascii_letters)
 number = [str(i) for i in range(0,10)]
+
+print("Looking at state: ", end="")
+print(nd_xalpha)
 
 # table = { (nd_start, tk_http):[tk_http,nd_httpaddress],\
 #           (nd_start, tk_ftp):[tk_ftp,nd_ftp],\
@@ -83,141 +86,155 @@ number = [str(i) for i in range(0,10)]
 # }
 
 x = lambda array: [f'(nd_l,{c}):[nd_segment]' for c in array]
-
+# print(x(number))
 table ={}
 
 def fillDic():
     for i in number:
-        key = (nd_G,i)
-        value = [nd_xalphas]
+        key = (nd_httpaddress,i)
+        value = [nd_hostport, nd_A]
         table[key] = value
 
-        key = (nd_password,i)
-        value = [nd_xalphas]
+        key = (nd_telnet,i)
+        value = [nd_login]
         table[key] = value
 
-        key = (nd_search,i)
-        value = [nd_xalphas,nd_F]
+        key = (nd_ftp,i)
+        value = [nd_login, tk_divider, nd_path]
+        table[key] = value
+
+        key = (nd_mailto,i)
+        value = [nd_xalphas, tk_at, nd_hostname]
+        table[key] = value
+
+        key = (nd_login,i)
+        value = [nd_user, tk_doubledot, nd_password, tk_at, nd_hostport]
+        table[key] = value
+
+        key = (nd_hostport,i)
+        value = [nd_hostname, nd_C]
+        table[key] = value
+
+        key = (nd_path,i)
+        value = [nd_segment, nd_E]
+        table[key] = value
+
+        key = (nd_segment,i)
+        value = [nd_xalphas, nd_I]
         table[key] = value
 
         key = (nd_I,i)
         value = [nd_segment]
         table[key] = value
 
-        
-        key = (nd_segment,i)
-        value = [nd_xalpha,nd_I]
+        key = (nd_search,i)
+        value = [nd_xalphas, nd_F]
         table[key] = value
-        
+
+        key = (nd_password,i)
+        value = [nd_xalphas]
+        table[key] = value
+
+        key = (nd_user,i)
+        value = [nd_xalphas]
+        table[key] = value
+
+        key = (nd_xalphas,i)
+        value = [nd_xalpha, nd_G]
+        table[key] = value
+
+        key = (nd_G,i)
+        value = [nd_xalphas]
+        table[key] = value
+
+        key = (nd_port,i)
+        value = [nd_digits]
+        table[key] = value
+
+        key = (nd_xalpha,i)
+        value = [nd_digit]
+        table[key] = value
+
+        key = (nd_digits,i)
+        value = [nd_digit, nd_H]
+        table[key] = value
+
         key = (nd_H,i)
         value = [nd_digits]
         table[key] = value
-        
+
         key = (nd_digit,i)
         value = [i]
-        table[key] = value
-        
-        key = (nd_xalpha,i)
-        value = [nd_digit, nd_H]
-        table[key] = value
-        
-        key = (nd_httpaddress,i)
-        value = [nd_hostport,nd_A]
-        table[key] = value
-        
-        key = (nd_telnet,i)
-        value = [nd_login]
-        table[key] = value
-        
-        key = (nd_ftp,i)
-        value = [nd_login,tk_divider,nd_path]
-        table[key] = value
-        
-        key = (nd_mailto,i)
-        value = [nd_xalphas,tk_at,nd_hostname]
-        table[key] = value
-        
-        key = (nd_login,i)
-        value = [nd_user,tk_doubledot,nd_password,tk_at,nd_hostport]
-        table[key] = value
-        
-        key = (nd_hostport,i)
-        value = [nd_hostname,nd_C]
-        table[key] = value
-        
-        key = (nd_hostname,i)
-        value = [nd_xalphas,nd_D]
-        table[key] = value
-        
-        key = (nd_path,i)
-        value = [nd_segment,nd_E]
         table[key] = value
 
     for i in letter:
        
-        key = (nd_G,i)
-        value = [nd_xalphas]
+        key = (nd_httpaddress,i)
+        value = [nd_hostport, nd_A]
         table[key] = value
 
-        key = (nd_password,i)
-        value = [nd_xalphas]
+        key = (nd_telnet,i)
+        value = [nd_login]
         table[key] = value
 
-        key = (nd_search,i)
-        value = [nd_xalphas,nd_F]
+        key = (nd_ftp,i)
+        value = [nd_login, tk_divider, nd_path]
+        table[key] = value
+
+        key = (nd_mailto,i)
+        value = [nd_xalphas, tk_at, nd_hostname]
+        table[key] = value
+
+        key = (nd_login,i)
+        value = [nd_user, tk_doubledot, nd_password, tk_at, nd_hostport]
+        table[key] = value
+
+        key = (nd_hostport,i)
+        value = [nd_hostname, nd_C]
+        table[key] = value
+
+        key = (nd_hostname,i)
+        value = [nd_xalphas, nd_D]
+        table[key] = value
+
+        key = (nd_path,i)
+        value = [nd_segment, nd_E]
+        table[key] = value
+
+        key = (nd_segment,i)
+        value = [nd_xalpha, nd_I]
         table[key] = value
 
         key = (nd_I,i)
         value = [nd_segment]
         table[key] = value
 
-        
-        key = (nd_segment,i)
-        value = [nd_xalpha,nd_I]
+        key = (nd_search,i)
+        value = [nd_xalphas, nd_F]
         table[key] = value
-        
-        key = (nd_H,i)
-        value = [nd_digits]
+
+        key = (nd_password,i)
+        value = [nd_xalphas]
         table[key] = value
-        
-        key = (nd_digit,i)
-        value = [i]
+
+        key = (nd_user,i)
+        value = [nd_xalphas]
         table[key] = value
-        
+
+        key = (nd_xalphas,i)
+        value = [nd_xalpha, nd_G]
+        table[key] = value
+
+        key = (nd_G,i)
+        value = [nd_xalphas]
+        table[key] = value
+
         key = (nd_xalpha,i)
-        value = [nd_digit, nd_H]
+        value = [nd_alpha]
         table[key] = value
-        
-        key = (nd_httpaddress,i)
-        value = [nd_hostport,nd_A]
-        table[key] = value
-        
-        key = (nd_telnet,i)
-        value = [nd_login]
-        table[key] = value
-        
-        key = (nd_ftp,i)
-        value = [nd_login,tk_divider,nd_path]
-        table[key] = value
-        
-        key = (nd_mailto,i)
-        value = [nd_xalphas,tk_at,nd_hostname]
-        table[key] = value
-        
-        key = (nd_login,i)
-        value = [nd_user,tk_doubledot,nd_password,tk_at,nd_hostport]
-        table[key] = value
-        
-        key = (nd_hostport,i)
-        value = [nd_hostname,nd_C]
-        table[key] = value
-        
-        key = (nd_hostname,i)
-        value = [nd_xalphas,nd_D]
-        table[key] = value
-        
-        key = (nd_path,i)
-        value = [nd_segment,nd_E]
+
+        key = (nd_alpha,i)
+        value = [i]
         table[key] = value
 
 
@@ -377,5 +394,125 @@ value = [tk_epsilon]
 table[key] = value
 
 fillDic()
-print(table)
+# print(table)
 
+
+
+def lexicalAnalysis(url):
+    # print(url)    
+    stack, pointer = getFirstType(url)
+    if len(stack) == 0 and pointer == -1:
+        # print('*** incorect url ****:' + url)
+        return False, 0
+
+    # print(stack)
+    while True:
+        state = stack.pop()
+        # print("Current state: ", end="")
+        # print(state)  
+
+        # terminalState = isStateTerminal(state)
+        
+
+        symbol = isToken(url[pointer])  
+        # print("Symbol is:", end=" ")
+        # print(symbol)
+
+        # print("If state is str:", end=" ")
+        # print(isinstance(state, str))
+
+        if isinstance(symbol, int) and state < 20:
+            if state == symbol:
+                if state == 16:
+                    break                
+                pointer += 1
+                continue
+
+        # if terminalState != "":
+        #     if terminalState == url[pointer]:
+        #         pointer += 1
+        #         continue
+
+        if isinstance(state, str):
+            if state == symbol:
+                pointer += 1                
+                continue
+                # break
+
+        if state == tk_epsilon:
+            continue
+
+        if state == tk_dollar  and symbol == tk_dollar:
+            break
+
+        values = table[(state, symbol)]
+        values
+        # print("Values of the state: ", end="")
+        # print(values)
+
+        for item in reversed(values):
+                stack.append(item)        
+        # print(stack)
+
+    print("Whole stack:", end=" ")
+    print(stack)                
+
+    return True, 0
+
+
+def isStateTerminal(state):
+    if state < 20:
+        for key, value in table.items():
+            if value == state:
+                return key
+    else:
+        return ""
+
+
+def isToken(symbol):    
+    key = symbols.get(symbol, "NO")
+    if isinstance(key, str):
+        return symbol
+    else:
+        return key
+
+    
+def getFirstType(url):
+    stack, pointer = parseBegining(url, "http://")
+    if len(stack) == 2 and pointer != -1:
+        return stack, pointer
+    stack, pointer = parseBegining(url, "ftp://")
+    if len(stack) == 2 and pointer != -1:
+        return stack, pointer
+    stack, pointer = parseBegining(url, "telnet://")
+    if len(stack) == 2 and pointer != 0:
+        return stack, pointer
+    stack, pointer = parseBegining(url, "mailto::")
+    if len(stack) == 2 and pointer != 0:
+        return stack, pointer    
+    return stack, pointer
+
+def parseBegining(url, symbol):
+    result = re.search(symbol, url)
+    if len(re.findall(symbol, url)) == 1 and result.start(0) == 0:
+        # print(table[(nd_start, keywords[symbol])])
+        # print(url[result.end(0)])
+        stack = [tk_dollar]
+        stack.append(table[(nd_start, keywords[symbol])][1])
+        return stack, result.end(0)
+    return [], -1
+
+def openFile():
+    with open("mock.txt", "r") as fileInput:
+        line_number = 0
+        for line in fileInput:
+            line_number += 1
+            answer, error_column = lexicalAnalysis(line)
+            if answer:
+                print("The input: " + line + " is correct!!")
+            else:
+                print("The input: " + line + " is incorrect!!")
+                print("Error happened at(" + str(line_number) + ", " + str(error_column) + ")")
+
+if __name__ == "__main__":
+    openFile()

@@ -1,1 +1,9 @@
-http://v2.overleaf.com
+http://v2.overleaf.com$
+ftp://Darksider:dragul@fakesite.org/94hgj$
+telnet://Darksider:dragul@fakesite.org$
+mailto::darksider458@gmail.com$
+htp://v2.overleaf.com$
+ftp://Darksider:dragulfakesite.org/94hgj$
+telnet://Darksider:dragulfakesite.org$
+mailto::darksider458gmail.com$
+https://v2.overleaf.com$
