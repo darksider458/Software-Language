@@ -11,82 +11,10 @@ symbols = { '@':tk_at, '+':tk_plus, '/':tk_divider, ':':tk_doubledot, '.':tk_dot
 keywords = {'http://':tk_http , 'ftp://':tk_ftp , 'telnet://':tk_telnet, 'mailto::':tk_mailto }
 letter = list(string.ascii_letters)
 number = [str(i) for i in range(0,10)]
+states = {nd_start:"start", nd_ftp:"ftpaddress", nd_telnet:"telnetaddress", nd_mailto:"mailtoaddress", nd_httpaddress:"httpaddress", nd_A:"A", nd_J:"J", nd_login:"login", nd_hostport:"hostport", 
+nd_C:"C", nd_hostname:"hostname", nd_D:"D", nd_path:"path", nd_E:"E", nd_segment:"segment", nd_I:"I", nd_search:"search", nd_F:"F", nd_password:"password", nd_user:"user",
+nd_xalphas:"xalphas", nd_G:"G", nd_port:"port", nd_xalpha:"xalpha", nd_digits:"digits", nd_H:"H", nd_alpha:"alpha", nd_digit:"digit"}
 
-print("Looking at state: ", end="")
-print(nd_xalpha)
-
-# table = { (nd_start, tk_http):[tk_http,nd_httpaddress],\
-#           (nd_start, tk_ftp):[tk_ftp,nd_ftp],\
-#           (nd_start, tk_telnet):[tk_telnet,nd_telnet],\
-#           (nd_start, tk_mailto):[tk_mailto,nd_mailto],\
-#           (nd_httpaddress,letter):[nd_hostport,nd_A],\
-#           (nd_httpaddress,number):[nd_hostport,nd_A],\
-#           (nd_A,tk_divider):[tk_divider,nd_path, nd_J],\
-#           (nd_A,tk_question):[tk_question,nd_search],\
-#           (nd_A,tk_dollar):[],\
-#           (nd_J, tk_question):[tk_question,nd_search],\
-#           (nd_J, tk_dollar):[],\
-#           (nd_telnet, letter):[nd_login],\
-#           (nd_telnet, number):[nd_login],\
-#           (nd_ftp, letter):[nd_login,tk_divider,nd_path],\
-#           (nd_ftp, number):[nd_login,tk_divider,nd_path],\
-#           (nd_mailto, letter):[nd_xalphas,tk_at,nd_hostname],\
-#           (nd_mailto, number):[nd_xalphas,tk_at,nd_hostname],\
-#           (nd_login, letter):[nd_user,tk_doubledot,nd_password,tk_at,nd_hostport],\
-#           (nd_login, number):[nd_user,tk_doubledot,nd_password,tk_at,nd_hostport],\
-#           (nd_hostport, letter):[nd_hostname, nd_C],\
-#           (nd_hostport, number):[nd_hostname, nd_C],\
-#           (nd_C, tk_divider):[],\
-#           (nd_C, tk_question):[],\
-#           (nd_C, tk_doubledot):[tk_doubledot, nd_port],\
-#           (nd_C, tk_dollar):[],\
-#           (nd_hostname, letter):[nd_xalphas, nd_D],\
-#           (nd_hostname, number):[nd_xalphas, nd_D],\
-#           (nd_D,tk_divider):[],\
-#           (nd_D,tk_question):[],\
-#           (nd_D,tk_doubledot):[],\
-#           (nd_D,tk_dot):[tk_dot, nd_hostname],\
-#           (nd_D, tk_dollar):[],\
-#           (nd_path,letter):[nd_segment, nd_E],\
-#           (nd_path,number):[nd_segment, nd_E],\
-#           (nd_E,tk_divider):[tk_divider],\
-#           (nd_E,tk_question):[tk_question],\
-#           (nd_E,tk_dollar):[],\
-#           (nd_segment,letter):[nd_xalpha, nd_I],\
-#           (nd_segment,number):[nd_xalpha, nd_I],\
-#           (nd_I,tk_divider):[],\
-#           (nd_I,tk_question):[],\
-#           (nd_I,letter):[nd_segment],\
-#           (nd_I,number):[nd_segment],\
-#           (nd_I,tk_dollar):[],\
-#           (nd_search,letter):[nd_xalphas, nd_F],\
-#           (nd_search,letter):[nd_xalphas, nd_F],\
-#           (nd_F,tk_plus):[tk_plus,nd_search],\
-#           (nd_F,tk_dollar):[],\
-#           (nd_password,letter):[nd_xalphas],\
-#           (nd_password,number):[nd_xalphas],\
-#           (nd_G,tk_divider):[],\
-#           (nd_G,tk_question):[],\
-#           (nd_G,tk_at):[],\
-#           (nd_G,tk_doubledot):[],\
-#           (nd_G,tk_dot):[],\
-#           (nd_G,tk_plus):[],\
-#           (nd_G,tk_dollar):[],\
-#           (nd_G,letter):[nd_xalphas],\
-#           (nd_G,number):[nd_xalphas],\
-#           (nd_port):[nd_digits],\
-#           (nd_xalpha,letter):[nd_alpha],\
-#           (nd_xalpha,number):[nd_digit, nd_H],\
-#           (nd_H,tk_divider):[],\
-#           (nd_H, tk_question):[],\
-#           (nd_H,number):[nd_digits],\
-#           (nd_H,tk_dollar):[],\
-#           (nd_alpha,letter):[letter],\
-#           (nd_digit,number):[number]
-# }
-
-x = lambda array: [f'(nd_l,{c}):[nd_segment]' for c in array]
-# print(x(number))
 table ={}
 
 def fillDic():
@@ -238,188 +166,65 @@ def fillDic():
         table[key] = value
 
 
-# ################### states which are not number or letter, didnt add $ rules
-# http
-key = (nd_start, tk_http)
-value = [tk_http, nd_httpaddress]
-table[key] = value
-# ftp
-key = (nd_start, tk_ftp)
-value = [tk_ftp, nd_ftp]
-table[key] = value
-# telnet
-key = (nd_start, tk_telnet)
-value = [tk_telnet, nd_telnet]
-table[key] = value
-# mailto
-key = (nd_start, tk_mailto)
-value = [tk_mailto, nd_mailto]
-table[key] = value
-# A
-# '/'
-key = (nd_A, tk_divider)
-value = [tk_divider, nd_path, nd_J]
-table[key] = value
-# '?'
-key = (nd_A, tk_question)
-value = [tk_question, nd_search]
-table[key] = value
-# '$'
-key = (nd_A, tk_dollar)
-value = [tk_epsilon]
-table[key] = value
-# J
-# '?'
-key = (nd_J, tk_question)
-value = [tk_question, nd_search]
-table[key] = value
-# '$'
-key = (nd_J, tk_dollar)
-value = [tk_epsilon]
-table[key] = value
-# C
-# '/'
-key = (nd_C, tk_divider)
-value = [tk_epsilon]
-table[key] = value
-# '?'
-key = (nd_C, tk_question)
-value = [tk_epsilon]
-table[key] = value
-# ':'
-key = (nd_C, tk_doubledot)
-value = [tk_doubledot, nd_port]
-table[key] = value
-# '$'
-key = (nd_C, tk_dollar)
-value = [tk_epsilon]
-table[key] = value
-# D
-# '/'
-key = (nd_D, tk_divider)
-value = [tk_epsilon]
-table[key] = value
-# '?'
-key = (nd_D, tk_question)
-value = [tk_epsilon]
-table[key] = value
-# ':'
-key = (nd_D, tk_doubledot)
-value = [tk_epsilon]
-table[key] = value
-# '.'
-key = (nd_D, tk_dot)
-value = [tk_dot, nd_hostname]
-table[key] = value
-# '$'
-key = (nd_D, tk_dollar)
-value = [tk_epsilon]
-table[key] = value
-# E
-# '/'
-key = (nd_E, tk_divider)
-value = [tk_divider, nd_path]
-table[key] = value
-# '?'
-key = (nd_E, tk_question)
-value = [tk_epsilon]
-table[key] = value
-# '$'
-key = (nd_E, tk_dollar)
-value = [tk_epsilon]
-table[key] = value
-# I
-# '/'
-key = (nd_I, tk_divider)
-value = [tk_epsilon]
-table[key] = value
-# '?'
-key = (nd_I, tk_question)
-value = [tk_epsilon]
-table[key] = value
-# '$'
-key = (nd_I, tk_dollar)
-value = [tk_epsilon]
-table[key] = value
-# F
-# '+'
-key = (nd_F, tk_plus)
-value = [tk_plus, nd_search]
-table[key] = value
-# '$'
-key = (nd_F, tk_dollar)
-value = [tk_epsilon]
-table[key] = value
-# G
-# '/'
-key = (nd_G, tk_divider)
-value = [tk_epsilon]
-table[key] = value
-# '?'
-key = (nd_G, tk_question)
-value = [tk_epsilon]
-table[key] = value
-# '@'
-key = (nd_G, tk_at)
-value = [tk_epsilon]
-table[key] = value
-# ':'
-key = (nd_G, tk_doubledot)
-value = [tk_epsilon]
-table[key] = value
-# '.'
-key = (nd_G, tk_dot)
-value = [tk_epsilon]
-table[key] = value
-# '+'
-key = (nd_G, tk_plus)
-value = [tk_epsilon]
-table[key] = value
-# '$'
-key = (nd_G, tk_dollar)
-value = [tk_epsilon]
-table[key] = value
-# H
-# '/'
-key = (nd_H, tk_divider)
-value = [tk_epsilon]
-table[key] = value
-# '?'
-key = (nd_H, tk_question)
-value = [tk_epsilon]
-table[key] = value
-# '$'
-key = (nd_H, tk_dollar)
-value = [tk_epsilon]
-table[key] = value
+keys = ((nd_start, tk_http),(nd_start, tk_ftp),(nd_start, tk_telnet),(nd_start, tk_mailto),(nd_A, tk_divider),\
+(nd_A, tk_question),(nd_A, tk_dollar),(nd_J, tk_question),(nd_J, tk_dollar),(nd_C, tk_divider),(nd_C, tk_question),(nd_C, tk_doubledot),\
+(nd_C, tk_dollar),(nd_D, tk_divider),(nd_D, tk_question),(nd_D, tk_doubledot),(nd_D, tk_dot), (nd_D, tk_dollar),\
+(nd_E, tk_divider),(nd_E, tk_question),(nd_E, tk_dollar),(nd_I, tk_divider),(nd_I, tk_question),(nd_I, tk_dollar),\
+(nd_F, tk_plus),(nd_F, tk_dollar), (nd_G, tk_divider),(nd_G, tk_question),(nd_G, tk_at),(nd_G, tk_doubledot),(nd_G, tk_dot),(nd_G, tk_plus),\
+(nd_G, tk_dollar),(nd_H, tk_divider),(nd_H, tk_question),(nd_H, tk_dollar))
 
-fillDic()
-# print(table)
+values = ([tk_http, nd_httpaddress],[tk_ftp, nd_ftp],[tk_telnet, nd_telnet],[tk_mailto, nd_mailto],[tk_divider, nd_path, nd_J],\
+[tk_question, nd_search],[tk_epsilon],[tk_question, nd_search],[tk_epsilon],[tk_epsilon],[tk_epsilon],[tk_doubledot, nd_port],\
+[tk_epsilon],[tk_epsilon],[tk_epsilon],[tk_epsilon],[tk_dot, nd_hostname],[tk_epsilon],\
+[tk_divider, nd_path],[tk_epsilon],[tk_epsilon],[tk_epsilon],[tk_epsilon],[tk_epsilon],\
+[tk_plus, nd_search],[tk_epsilon],[tk_epsilon],[tk_epsilon],[tk_epsilon],[tk_epsilon],[tk_epsilon],[tk_epsilon],\
+[tk_epsilon],[tk_epsilon],[tk_epsilon],[tk_epsilon])
 
 
 
-def lexicalAnalysis(url):
-    # print(url)    
+
+def printTopStack(state):
+    """This function prints current state of stack so that user can undestand the steps how it got to it"""
+    if isinstance(state, str):
+        if state in number:
+            # print("Top of stack: " + state)
+            print("Current top of stack is token: 'number'")
+        if state in letter:
+            # print("Top of stack: " + state)
+            print("Current top of stack is token: 'letter'")
+    elif state < 20:
+        if state < 4:
+            for key, value in keywords.items():
+                if state == value:
+                    print("Current top of stack is a token: '" + key + "'")
+                    break
+        else:
+
+            for key, value in symbols.items():
+                if state == value:
+                    print("Current top of stack is a token: '" + key + "'")
+                    break
+    else:
+        printNonTerminalState(state)
+
+def printNonTerminalState(state):
+    """Print non terminal characters in humanly undestandable syntax"""
+    value = states[state]
+    print("Current top of the stack is state: '" + value + "'")
+
+def lexicalAnalysis(url):  
+    """Main part of the analyzer which the main loop of the program and logic"""
     stack, pointer = getFirstType(url)
     if len(stack) == 0 and pointer == -1:
-        # print('*** incorect url ****:' + url)
         return False, 0
-
-    # print(stack)
+    
     while True:
         state = stack.pop()
-        # print("Current state: ", end="")
-        # print(state)  
-
-        # terminalState = isStateTerminal(state)
+        print("Currently working with char: '" + url[pointer] + "'")
+        symbol = isToken(url[pointer]) 
         
-
-        symbol = isToken(url[pointer])  
-        # print("Symbol is:", end=" ")
-        # print(symbol)
-
-        # print("If state is str:", end=" ")
-        # print(isinstance(state, str))
+                 
+        printTopStack(state)
 
         if isinstance(symbol, int) and state < 20:
             if state == symbol:
@@ -428,39 +233,32 @@ def lexicalAnalysis(url):
                 pointer += 1
                 continue
 
-        # if terminalState != "":
-        #     if terminalState == url[pointer]:
-        #         pointer += 1
-        #         continue
-
         if isinstance(state, str):
             if state == symbol:
                 pointer += 1                
-                continue
-                # break
+                continue                
 
         if state == tk_epsilon:
+            print("Epsilon rule")
             continue
 
         if state == tk_dollar  and symbol == tk_dollar:
             break
 
+        doesntExist = table.get((state, symbol), True)
+        if isinstance(doesntExist, bool):
+            return False, pointer
         values = table[(state, symbol)]
-        values
-        # print("Values of the state: ", end="")
-        # print(values)
+        values        
 
         for item in reversed(values):
-                stack.append(item)        
-        # print(stack)
-
-    print("Whole stack:", end=" ")
-    print(stack)                
+                stack.append(item)                                   
 
     return True, 0
 
 
 def isStateTerminal(state):
+    """Functions cheks if the state which got from stack is terminal character"""
     if state < 20:
         for key, value in table.items():
             if value == state:
@@ -469,7 +267,8 @@ def isStateTerminal(state):
         return ""
 
 
-def isToken(symbol):    
+def isToken(symbol):  
+    """Check if symbol which is on input can be substitute for token"""  
     key = symbols.get(symbol, "NO")
     if isinstance(key, str):
         return symbol
@@ -478,6 +277,7 @@ def isToken(symbol):
 
     
 def getFirstType(url):
+    """First parse the begining of the URL if the protocol is right and determine next steps of the program"""
     stack, pointer = parseBegining(url, "http://")
     if len(stack) == 2 and pointer != -1:
         return stack, pointer
@@ -493,26 +293,34 @@ def getFirstType(url):
     return stack, pointer
 
 def parseBegining(url, symbol):
+    """Parse the begining of the URL"""
     result = re.search(symbol, url)
-    if len(re.findall(symbol, url)) == 1 and result.start(0) == 0:
-        # print(table[(nd_start, keywords[symbol])])
-        # print(url[result.end(0)])
+    if len(re.findall(symbol, url)) == 1 and result.start(0) == 0:        
         stack = [tk_dollar]
         stack.append(table[(nd_start, keywords[symbol])][1])
         return stack, result.end(0)
     return [], -1
 
 def openFile():
+    """Function which opens file and reads the input from it, then redirects the input to Lexical Analyzer function"""
     with open("mock.txt", "r") as fileInput:
         line_number = 0
         for line in fileInput:
             line_number += 1
+            line = re.sub("\n", "$", line)
             answer, error_column = lexicalAnalysis(line)
+            line = re.sub("$", "", line)
             if answer:
                 print("The input: " + line + " is correct!!")
             else:
                 print("The input: " + line + " is incorrect!!")
                 print("Error happened at(" + str(line_number) + ", " + str(error_column) + ")")
+                if error_column == 0:
+                    print("There is problem in protocol used")
+            print("******** Next line ***********")
 
 if __name__ == "__main__":
+    for i in range(0,len(keys)):
+        table[keys[i]] = values[i]
+    fillDic()
     openFile()
